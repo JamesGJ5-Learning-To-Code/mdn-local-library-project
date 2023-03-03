@@ -34,29 +34,31 @@ function authorCreate(first_name, family_name, d_birth, d_death, cb) {
   
   const author = new Author(authordetail);
        
-  author.save(function (err) {
+  author.save().then(() => {
+    console.log('New Author: ' + author);
+    authors.push(author)
+    cb(null, author)
+  }).catch((err) => {
     if (err) {
       cb(err, null)
       return
     }
-    console.log('New Author: ' + author);
-    authors.push(author)
-    cb(null, author)
-  }  );
+  });
 }
 
 function genreCreate(name, cb) {
   const genre = new Genre({ name: name });
-       
-  genre.save(function (err) {
-    if (err) {
-      cb(err, null);
-      return;
-    }
+
+  genre.save().then(() => {
     console.log('New Genre: ' + genre);
     genres.push(genre)
-    cb(null, genre);
-  }   );
+    cb(null, genre)
+  }).catch((err) => {
+    if (err) {
+      cb(err, null)
+      return
+    }
+  });
 }
 
 function bookCreate(title, summary, isbn, author, genre, cb) {
@@ -69,15 +71,16 @@ function bookCreate(title, summary, isbn, author, genre, cb) {
   if (genre != false) bookdetail.genre = genre
     
   const book = new Book(bookdetail);    
-  book.save(function (err) {
+  book.save().then(() => {
+    console.log('New Book: ' + book);
+    books.push(book)
+    cb(null, book)
+  }).catch((err) => {
     if (err) {
       cb(err, null)
       return
     }
-    console.log('New Book: ' + book);
-    books.push(book)
-    cb(null, book)
-  }  );
+  });
 }
 
 
@@ -90,16 +93,16 @@ function bookInstanceCreate(book, imprint, due_back, status, cb) {
   if (status != false) bookinstancedetail.status = status
     
   const bookinstance = new BookInstance(bookinstancedetail);    
-  bookinstance.save(function (err) {
+  bookinstance.save().then(() => {
+    console.log('ERROR CREATING BookInstance: ' + bookinstance);
+    bookinstances.push(bookinstance)
+    cb(null, bookinstance)
+  }).catch((err) => {
     if (err) {
-      console.log('ERROR CREATING BookInstance: ' + bookinstance);
       cb(err, null)
       return
     }
-    console.log('New BookInstance: ' + bookinstance);
-    bookinstances.push(bookinstance)
-    cb(null, book)
-  }  );
+  });
 }
 
 
