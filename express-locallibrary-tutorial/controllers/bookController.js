@@ -15,9 +15,22 @@ exports.index = (req, res) => {
       Genre.countDocuments({})
     ]
   ).then((results) => {
+    const countsObject = {};
+    const countNames = [
+      "book_count",
+      "book_instance_count",
+      "book_instance_available_count",
+      "author_count",
+      "genre_count"
+    ];
+    countNames.forEach((name, index) => {
+      const count = results[index];
+      countsObject[name] = count;
+    });
+    // TODO: replace the above naming method with a more succinct process
     res.render("index", {
       title: "Local Library Home",
-      data: results,
+      data: countsObject,
     });
   });
   // TODO: add an acceptable catch
