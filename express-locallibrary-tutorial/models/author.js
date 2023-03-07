@@ -39,5 +39,9 @@ AuthorSchema.virtual("date_of_birth_formatted").get(function () {
   return formatJSDate(this.date_of_birth);
 });
 
+AuthorSchema.virtual("date_of_death_formatted").get(function () {
+  return formatJSDate(this.date_of_death);
+});
+
 // Export model
 module.exports = mongoose.model("Author", AuthorSchema);
