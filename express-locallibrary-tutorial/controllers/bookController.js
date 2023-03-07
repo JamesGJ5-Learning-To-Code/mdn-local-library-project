@@ -6,32 +6,21 @@ const BookInstance = require("../models/bookinstance");
 const async = require("async");
 
 exports.index = (req, res) => {
-  async.parallel(
-    {
-      book_count(callback) {
-        Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
-      },
-      book_instance_count(callback) {
-        BookInstance.countDocuments({}, callback);
-      },
-      book_instance_available_count(callback) {
-        BookInstance.countDocuments({ status: "Available" }, callback);
-      },
-      author_count(callback) {
-        Author.countDocuments({}, callback);
-      },
-      genre_count(callback) {
-        Genre.countDocuments({}, callback);
-      },
-    },
-    (err, results) => {
-      res.render("index", {
-        title: "Local Library Home",
-        error: err,
-        data: results,
-      });
-    }
-  );
+  Promise.all(
+    [
+      Book.countDocuments({}),
+      BookInstance.countDocuments({}),
+      BookInstance.countDocuments({ status: "Available" }),
+      Author.countDocuments({}),
+      Genre.countDocuments({})
+    ]
+  ).then((results) => {
+    res.render("index", {
+      title: "Local Library Home",
+      data: results,
+    });
+  });
+  // TODO: add an acceptable catch
 };
 
 // Display list of all books.
