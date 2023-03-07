@@ -1,4 +1,5 @@
 const Author = require("../models/author");
+const Book = require("../models/book");
 
 // Display list of all Authors.
 exports.author_list = function (req, res, next) {
@@ -16,8 +17,28 @@ exports.author_list = function (req, res, next) {
 }
 
 // Display detail page for a specific Author.
-exports.author_detail = (req, res) => {
-  res.send(`NOT IMPLEMENTED: Author detail: ${req.params.id}`);
+exports.author_detail = (req, res, next) => {
+  Promise.all(
+    [
+      Author.findById(req.params.id),
+      Book.find({ author: req.params.id }, "title summary")
+    ]
+  )
+  .then((results) => {
+    if (results[0] == null) {
+      const err = new Error("Author not found");
+      err.status = 404;
+      return next(err);
+    }
+    res.render("author_detail", {
+      title: "Author Detail",
+      author: results[0],
+      author_books: results[1],
+    });
+  })
+  .catch((err) => {
+    return next(err);
+  });
 };
 
 // Display Author create form on GET.
