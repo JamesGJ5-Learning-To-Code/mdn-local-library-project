@@ -32,8 +32,13 @@ exports.index = (req, res) => {
       title: "Local Library Home",
       data: countsObject,
     });
+  }).catch((rejection) => {
+    res.render("index", {
+      title: "Local Library Home",
+      error: rejection
+    });
   });
-  // TODO: add an acceptable catch
+  // TODO: DRY above
 };
 
 // Display list of all books.
