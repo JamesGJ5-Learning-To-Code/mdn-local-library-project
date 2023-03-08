@@ -58,6 +58,9 @@ exports.genre_create_post = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
+    // TODO: consider doing this in the else block within the else block 
+    // below. If so, in the below if block, replace genre with 
+    // 'genre: req.body.name' instead
     // Create a genre object with escaped and trimmed data.
     const genre = new Genre({ name: req.body.name });
 
