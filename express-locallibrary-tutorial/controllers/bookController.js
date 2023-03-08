@@ -88,8 +88,24 @@ exports.book_detail = (req, res, next) => {
 };
 
 // Display book create form on GET.
-exports.book_create_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: Book create GET");
+exports.book_create_get = (req, res, next) => {
+  // Get all authors and genres, which we can use for adding to our book.
+  Promise.all(
+    [
+      Author.find(),
+      Genre.find(),
+    ]
+  )
+  .then((results) => {
+    res.render("book_form", {
+      title: "Create Book",
+      authors: results[0],
+      genres: results[1],
+    });
+  })
+  .catch((err) => {
+    return next(err);
+  });
 };
 
 // Handle book create on POST.
