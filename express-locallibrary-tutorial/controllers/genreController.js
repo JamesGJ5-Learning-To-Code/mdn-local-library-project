@@ -49,9 +49,50 @@ exports.genre_create_get = (req, res, next) => {
 };
 
 // Handle Genre create on POST.
-exports.genre_create_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: Genre create POST");
-};
+exports.genre_create_post = [
+  // Validate and sanitize the name field.
+  body("name", "Genre name required").trim().isLength({ min: 1 }).escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a genre object with escaped and trimmed data.
+    const genre = new Genre({ name: req.body.name });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render("genre_form", {
+        title: "Create Genre",
+        genre,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid.
+      // Check if Genre with same name already exists.
+      Genre.findOne({ name: req.body.name })
+      .then((found_genre) => {
+        if (found_genre) {
+          // Genre exists, redirect to its detail page.
+          res.redirect(found_genre.url);
+        } else {
+          genre.save().then(() => {
+            // Genre saved. Redirect to genre detail page.
+            res.redirect(genre.url);
+          })
+          .catch((err) => {
+            return next(err);
+          });
+        }
+      })
+      .catch((err) => {
+        return next(err);
+      });
+    }
+  },
+];
 
 // Display Genre delete form on GET.
 exports.genre_delete_get = (req, res) => {
