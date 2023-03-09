@@ -261,10 +261,39 @@ exports.book_delete_post = (req, res) => {
   // - We attach a catch block to return next(err) if err is not null
   // - Otherwise, we continue in a then block
 
-  // - Next, we make a deletion using Book.findByIdAndRemove()
+  // - In then(), If the book has bookinstances, render the deletion page just as in book_delete_get
+  // - Otherwise, we make a deletion using Book.findByIdAndRemove()
   // - In an attached then block we redirect the user to "catalog/books"
   // - In the catch block, simply handle the error as mentioned above for the outer catch 
   // block
+
+  Promise.all(
+    [
+      Book.findById(req.body.bookid)
+        .populate("author")
+        .populate("genre"),
+      BookInstance.find({ book: req.body.bookid }),
+    ]
+  )
+  .then((results) => {
+    if (results[0].length > 0) {
+      res.render("book_delete", {
+        title: "Delete Book",
+        book: results[0],
+        book_bookinstances: results[1],
+      });
+      return;
+    }
+    Book.findByIdAndRemove(req.body.bookid).then(() => {
+      res.redirect("/catalog/books");
+    })
+    .catch((err) => {
+      return next(err);
+    });
+  })
+  .catch((err) => {
+    return next(err);
+  });
 };
 
 // Display book update form on GET.
