@@ -223,6 +223,30 @@ exports.book_delete_get = (req, res) => {
   // BookInstance list
 
   // - Finally, write the book_delete.pug view
+
+  Promise.all(
+    [
+      Book.findById(req.params.id)
+        .populate("author")
+        .populate("genre"),
+      BookInstance.find({ book: req.params.id }),
+    ]
+  )
+  .then((results) => {
+    if (results[0] == null) {
+      // Book not found
+      res.redirect("/catalog/books");
+    }
+    console.log(results[0]);
+    res.render("book_delete", {
+      title: "Delete Book",
+      book: results[0],
+      book_bookinstances: results[1],
+    });
+  })
+  .catch((err) => {
+    return next(err);
+  });
 };
 
 // Handle book delete on POST.
