@@ -111,8 +111,7 @@ exports.bookinstance_create_post = [
 ];
 
 // Display BookInstance delete form on GET.
-// TODO: make next argument accessible below
-exports.bookinstance_delete_get = (req, res) => {
+exports.bookinstance_delete_get = (req, res, next) => {
   BookInstance.findById(req.params.id).populate("book")
   .then((foundBookInstance) => {
     if (foundBookInstance == null) {
