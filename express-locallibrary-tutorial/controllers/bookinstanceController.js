@@ -111,6 +111,7 @@ exports.bookinstance_create_post = [
 ];
 
 // Display BookInstance delete form on GET.
+// TODO: make next argument accessible below
 exports.bookinstance_delete_get = (req, res) => {
   BookInstance.findById(req.params.id).populate("book")
   .then((foundBookInstance) => {
@@ -128,8 +129,14 @@ exports.bookinstance_delete_get = (req, res) => {
 };
 
 // Handle BookInstance delete on POST.
-exports.bookinstance_delete_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: BookInstance delete POST");
+exports.bookinstance_delete_post = (req, res, next) => {
+  BookInstance.findByIdAndRemove(req.body.bookinstanceid)
+  .then(() => {
+    res.redirect("/catalog/bookinstances");
+  })
+  .catch((err) => {
+    return next(err);
+  });
 };
 
 // Display BookInstance update form on GET.
