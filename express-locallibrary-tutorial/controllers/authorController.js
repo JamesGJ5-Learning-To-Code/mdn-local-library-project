@@ -130,8 +130,36 @@ exports.author_delete_get = (req, res, next) => {
 };
 
 // Handle Author delete on POST.
-exports.author_delete_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: Author delete POST");
+exports.author_delete_post = (req, res, next) => {
+  Promise.all(
+    [
+      Author.findById(req.body.authorid),
+      Book.find({ author: req.body.authorid }),
+    ]
+  )
+  .then((results) => {
+    // Success
+    if (results[1].length > 0) {
+      // Author has books. Render in same way as for GET route.
+      res.render("author_delete", {
+        title: "Delete Author",
+        author: results[0],
+        author_books: results[1],
+      });
+      return;
+    }
+    // Author has no books. Delete object and redirect to the list of authors.
+    Author.findByIdAndRemove(req.body.authorid).then(() => {
+      // Success - go to author list
+      res.redirect("/catalog/authors");
+    })
+    .catch((err) => {
+      return next(err);
+    });
+  })
+  .catch((err) => {
+    return next(err);
+  });
 };
 
 // Display Author update form on GET.
