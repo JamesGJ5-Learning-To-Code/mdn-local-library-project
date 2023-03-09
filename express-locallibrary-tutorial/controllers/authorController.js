@@ -106,8 +106,27 @@ exports.author_create_post = [
 ];
 
 // Display Author delete form on GET.
-exports.author_delete_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: Author delete GET");
+exports.author_delete_get = (req, res, next) => {
+  Promise.all(
+    [
+      Author.findById(req.params.id),
+      Book.find({ author: req.params.id }),
+    ]
+  )
+  .then((results) => {
+    if (results[0] == null) {
+      // No results.
+      res.redirect("/catalog/authors");
+    }
+    res.render("author_delete", {
+      title: "Delete Author",
+      author: results[0],
+      author_books: results[1],
+    });
+  })
+  .catch((err) => {
+    return next(err);
+  });
 };
 
 // Handle Author delete on POST.
