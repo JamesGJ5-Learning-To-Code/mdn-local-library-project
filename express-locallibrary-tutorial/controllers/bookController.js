@@ -202,8 +202,47 @@ exports.book_delete_post = (req, res) => {
 };
 
 // Display book update form on GET.
-exports.book_update_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: Book update GET");
+exports.book_update_get = (req, res, next) => {
+  // Get book, authors and genres for form.
+  Promise.all(
+    [
+      Book.findById(req.params.id)
+        .populate("author")
+        .populate("genre"),
+      Author.find(),
+      Genre.find(),
+    ]
+  )
+  .then((results) => {
+    // TODO: consider daisy-chaining the method orFail() to the Book.findById query above 
+    // so that an error is indeed thrown if the Book is not found, meaning the catch block
+    // below will be accessed rather than the following if block (at the end of which 
+    // is a return statement anyway)
+    if (results[0] == null) {
+      // No results.
+      const err = new Error("Book not found");
+      err.status = 404;
+      return next(err);
+    }
+    // Success.
+    // Mark our selected genres as checked.
+    for (const genre of results[2]) {
+      for (const bookGenre of results[0].genre) {
+        if (genre._id.toString() === bookGenre._id.toString()) {
+          genre.checked = "true";
+        }
+      }
+    }
+    res.render("book_form", {
+      title: "Update Book",
+      authors: results[1],
+      genres: results[2],
+      book: results[0],
+    });
+  })
+  .catch((err) => {
+    return next(err);
+  });
 };
 
 // Handle book update on POST.
