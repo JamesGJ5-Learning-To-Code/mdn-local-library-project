@@ -251,7 +251,20 @@ exports.book_delete_get = (req, res) => {
 
 // Handle book delete on POST.
 exports.book_delete_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: Book delete POST");
+  // - In req.body.bookid we have the ID of the Book to be deleted
+
+  // - So, we findById the Book in the database, using req.body.bookid
+  // - In PARALLEL, we also look for the BookInstances in the database matching 
+  // book: req.body.bookid; we do this so that, later, if there are any, we render the same 
+  // view as we do in the book_delete_get controller above
+
+  // - We attach a catch block to return next(err) if err is not null
+  // - Otherwise, we continue in a then block
+
+  // - Next, we make a deletion using Book.findByIdAndRemove()
+  // - In an attached then block we redirect the user to "catalog/books"
+  // - In the catch block, simply handle the error as mentioned above for the outer catch 
+  // block
 };
 
 // Display book update form on GET.
