@@ -275,7 +275,7 @@ exports.book_delete_post = (req, res, next) => {
     ]
   )
   .then((results) => {
-    if (results[0].length > 0) {
+    if (results[1].length > 0) {
       res.render("book_delete", {
         title: "Delete Book",
         book: results[0],
