@@ -191,9 +191,38 @@ exports.book_create_post = [
   },
 ];
 
+// Plans for book_delete_get controller function:
+
+// - Each BookInstance object has a reference to a Book object
+
+// - In the view for deleting a Book object, if there are BookInstance objects referring to the 
+// Book object, display them and tell the user they must be deleted before the Book is. See 
+// author_delete.pug for inspiration, where a conditional checks if the BookInstance objects 
+// have been deleted or not
+
+// - If there are no relevant BookInstances, a delete button (to POST the deletion request) 
+// should be shown in said view. See else block in the conditional mentioned above for 
+// inspiration.
+
 // Display book delete form on GET.
 exports.book_delete_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: Book delete GET");
+  // - In req, we have the ID of the Book.
+
+  // - So, we findById the Book in the database.
+  // - IN PARALLEL, We also get a list of BookInstance objects referring to this Book by 
+  //   finding all BookInstance objects where there's a match for the parameters book: 
+  //   req.params.id (may have to convert to ObjectID if there is an issue here).
+
+  // - If either of these fail, then in our catch block, we simply propagate the error to 
+  // the next piece of middleware
+  // - If, instead, both are successful, we continue.
+
+  // - Next, we check if there was NO Book found. Therefore, the Book should already have been 
+  // deleted, so redirect the user to catalog/books (which will still be accessible)
+  // - Otherwise, we render a book_delete.pug view, passing to it the Book and the 
+  // BookInstance list
+
+  // - Finally, write the book_delete.pug view
 };
 
 // Handle book delete on POST.
