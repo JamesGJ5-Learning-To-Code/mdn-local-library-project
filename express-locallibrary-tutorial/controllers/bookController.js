@@ -237,7 +237,6 @@ exports.book_delete_get = (req, res) => {
       // Book not found
       res.redirect("/catalog/books");
     }
-    console.log(results[0]);
     res.render("book_delete", {
       title: "Delete Book",
       book: results[0],
