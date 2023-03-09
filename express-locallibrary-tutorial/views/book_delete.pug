@@ -1,0 +1,53 @@
+//- Requires:
+//- - Same introductory book information as in book_detail.pug (h1 followed by p's)
+//- - A list of BookInstance objects if there are any (linking to each bookinstance/:id)
+//- - If there are no BookInstance objects, a form with a button for deletion (which makes 
+//- a POST request (that's the method) with an action that's an empty string (meaning 
+//- the request URL is the same as that of the current page, as in catalog.js))
+
+extends layout
+
+block content
+  h1 Title: #{book.title}
+
+  p #[strong Author:]
+    a(href=book.author.url) #{book.author.name}
+  p #[strong Summary:] #{book.summary}
+  p #[strong ISBN:] #{book.isbn}
+  p #[strong Genre:]
+    each val, index in book.genre
+      a(href=val.url) #{val.name}
+      if index < book.genre.length - 1
+        |,
+
+  if book_bookinstances.length
+
+    p #[strong Delete the following bookinstances before attempting to delete this book.]
+
+    div(style='margin-left:20px;margin-top:20px')
+
+      h4 Bookinstances
+
+      dl
+      each val in book_bookinstances
+        hr
+        if val.status=='Available'
+            p.text-success #{val.status}
+        else if val.status=='Maintenance'
+            p.text-danger #{val.status}
+        else
+            p.text-warning #{val.status}
+        p #[strong Imprint:] #{val.imprint}
+        if val.status!='Available'
+            p #[strong Due back:] #{val.due_back_formatted}
+        p #[strong Id:]
+            a(href=val.url) #{val._id}
+
+  else
+    p Do you really want to delete this Book?
+
+    form(method='POST' action='')
+      div.form-group
+        input#bookid.form-control(type='hidden',name='bookid', required='true', value=book._id )
+
+      button.btn.btn-primary(type='submit') Delete
