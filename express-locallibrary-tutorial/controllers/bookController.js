@@ -205,7 +205,7 @@ exports.book_create_post = [
 // inspiration.
 
 // Display book delete form on GET.
-exports.book_delete_get = (req, res) => {
+exports.book_delete_get = (req, res, next) => {
   // - In req, we have the ID of the Book.
 
   // - So, we findById the Book in the database.
@@ -249,7 +249,7 @@ exports.book_delete_get = (req, res) => {
 };
 
 // Handle book delete on POST.
-exports.book_delete_post = (req, res) => {
+exports.book_delete_post = (req, res, next) => {
   // - In req.body.bookid we have the ID of the Book to be deleted
 
   // - So, we findById the Book in the database, using req.body.bookid
