@@ -212,5 +212,53 @@ exports.author_update_post = [
 
   // If the above is instead rejected, call next with the rejection
 
-  
+  body("first_name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("First name must be specified.")
+    .isAlphanumeric()
+    .withMessage("First name has non-alphanumeric characters."),
+  body("family_name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Family name must be specified.")
+    .isAlphanumeric()
+    .withMessage("Family name has non-alphanumeric characters."),
+  body("date_of_birth", "Invalid date of birth")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+  body("date_of_death", "Invalid date of death")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .toDate(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const author = new Author({
+      first_name: req.body.first_name,
+      family_name: req.body.family_name,
+      date_of_birth: req.body.date_of_birth,
+      date_of_death: req.body.date_of_death,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("author_form", {
+        title: "Update Author",
+        author,
+      });
+      return;
+    }
+
+    Author.findByIdAndUpdate(req.params.id, author, {}).then((theauthor) => {
+      res.redirect(theauthor.url);
+    })
+    .catch((err) => {
+      return next(err);
+    });
+  },
 ];
