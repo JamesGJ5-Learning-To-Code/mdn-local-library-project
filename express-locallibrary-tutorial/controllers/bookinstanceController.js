@@ -140,7 +140,28 @@ exports.bookinstance_delete_post = (req, res, next) => {
 
 // Display BookInstance update form on GET.
 exports.bookinstance_update_get = (req, res, next) => {
-  res.send("NOT IMPLEMENTED: BookInstance update GET");
+  // catalog.js shows that when this request is made, the POST path contains id as a 
+  // parameter, which can be extracted from the request via req.params.id
+
+  // In the update form we should show details of the bookinstance to be updated (as 
+  // a starting point for the changes), so we look for the BookInstance in the database
+
+  // Daisy-chain an orFail() method to the request (as mentioned in 
+  // https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/forms/Update_Book_form)
+  // so that if the BookInstance isn't found we go to the catch block
+
+  // We add a catch block afterwards in case there is an error with the above, and supply 
+  // the error to the 
+
+  // If there is no error, we use a then block with the following:
+
+  // Render bookinstance_form.pug, supplying the found BookInstance object in 
+  // the 'bookinstance' parameter, so we get the form with the current details pre-rendered
+
+  // Then, in models/bookinstance.js, write a new virtual property that returns BookInstance.due_back 
+  // as a string in the format "YYYY-MM-DD"
+
+  // Access the virtual property in the date input in bookinstance_form.pug
 };
 
 // Handle bookinstance update on POST.
