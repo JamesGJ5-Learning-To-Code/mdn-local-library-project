@@ -190,6 +190,27 @@ exports.author_update_get = (req, res, next) => {
 };
 
 // Handle Author update on POST.
-exports.author_update_post = (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Author update POST");
-};
+exports.author_update_post = [
+  // First, validate and sanitise the fields as in author_create_post
+
+  // Do all of the following in the same middleware function, in which req, res and 
+  // next are accessible:
+
+  // First, use validationResult() to get an array of errors, called 'errors'
+
+  // Make an Author (called 'author') using the sanitised fields (in req.body), making sure the 
+  // ID chosen is req.params.id
+
+  // If 'errors' is not empty, render author_form with author as an argument and then return
+
+  // If 'errors' is instead empty:
+
+  // Call findByIdAndUpdate on Author, passing req.params.id as the ID, 'author' as the new 
+  // Author, and {} as the options
+
+  // If the above is fulfilled, redirect to the URL of the Author returned in the fulfillment
+
+  // If the above is instead rejected, call next with the rejection
+
+  
+];
