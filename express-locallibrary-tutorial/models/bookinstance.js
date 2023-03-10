@@ -1,4 +1,5 @@
 const { DateTime } = require("luxon");
+const yyyymmdd = require("yyyy-mm-dd");
 
 const mongoose = require("mongoose");
 
@@ -24,6 +25,10 @@ BookInstanceSchema.virtual("url").get(function () {
 
 BookInstanceSchema.virtual("due_back_formatted").get(function () {
   return DateTime.fromJSDate(this.due_back).toLocaleString(DateTime.DATE_MED);
+});
+
+BookInstanceSchema.virtual("due_back_formatted_for_date_input").get(function () {
+  return yyyymmdd(this.due_back);
 });
 
 // Export model
