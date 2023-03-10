@@ -152,11 +152,11 @@ exports.genre_delete_post = (req, res, next) => {
 };
 
 // Display Genre update form on GET.
-exports.genre_update_get = (req, res) => {
+exports.genre_update_get = (req, res, next) => {
   res.send("NOT IMPLEMENTED: Genre update GET");
 };
 
 // Handle Genre update on POST.
-exports.genre_update_post = (req, res) => {
+exports.genre_update_post = (req, res, next) => {
   res.send("NOT IMPLEMENTED: Genre update POST");
 };
