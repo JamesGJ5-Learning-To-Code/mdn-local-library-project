@@ -163,7 +163,7 @@ exports.author_delete_post = (req, res, next) => {
 };
 
 // Display Author update form on GET.
-exports.author_update_get = (req, res) => {
+exports.author_update_get = (req, res, next) => {
   // Taking id from req.params.id, find the Author object in the database via its ID, 
   // using orFail() to ensure the query is rejected if the Author is not found
 
@@ -175,9 +175,18 @@ exports.author_update_get = (req, res) => {
   // - author: the author object that was found
 
   // Put a link in author_detail.pug that triggers a GET request with the correct URL
+
+  // Author.findById(req.params.id)
+  //   .orFail()
+  // .then((foundAuthor) => {
+
+  // })
+  // .catch((err) => {
+  //   return next(err)
+  // })
 };
 
 // Handle Author update on POST.
-exports.author_update_post = (req, res) => {
+exports.author_update_post = (req, res, next) => {
   res.send("NOT IMPLEMENTED: Author update POST");
 };
