@@ -146,9 +146,14 @@ exports.bookinstance_update_get = (req, res, next) => {
   // In the update form we should show details of the bookinstance to be updated (as 
   // a starting point for the changes), so we look for the BookInstance in the database
 
+  // Populate the book field
+
   // Daisy-chain an orFail() method to the request (as mentioned in 
   // https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/forms/Update_Book_form)
   // so that if the BookInstance isn't found we go to the catch block
+
+  // In parallel to the query above, find all the Books in the database so they can be shown as options
+  // in the form
 
   // We add a catch block afterwards in case there is an error with the above, and supply 
   // the error to the 
@@ -156,12 +161,34 @@ exports.bookinstance_update_get = (req, res, next) => {
   // If there is no error, we use a then block with the following:
 
   // Render bookinstance_form.pug, supplying the found BookInstance object in 
-  // the 'bookinstance' parameter, so we get the form with the current details pre-rendered
+  // the 'bookinstance' parameter, so we get the form with the current details pre-rendered; supply 
+  // foundBookInstance.book as the 'selected_book'; supply the foundBookArray as the 'book_list'
 
   // Then, in models/bookinstance.js, write a new virtual property that returns BookInstance.due_back 
   // as a string in the format "YYYY-MM-DD"
 
   // Access the virtual property in the date input in bookinstance_form.pug
+
+  Promise.all(
+    [
+      BookInstance.findById(req.params.id)
+        .orFail()
+        .populate("book"),
+      Book.find({}, "title"),
+    ]
+  )
+  .then((results) => {
+    const [foundBookInstance, foundBookArray] = results;
+    res.render("bookinstance_form", {
+      title: "Update BookInstance",
+      bookinstance: foundBookInstance,
+      book_list: foundBookArray,
+      selected_book: foundBookInstance.book._id,
+    });
+  })
+  .catch((err) => {
+    return next(err);
+  })
 };
 
 // Handle bookinstance update on POST.
