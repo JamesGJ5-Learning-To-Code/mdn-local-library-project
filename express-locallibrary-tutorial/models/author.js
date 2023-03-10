@@ -1,4 +1,5 @@
 const { DateTime } = require("luxon");
+const yyyymmdd = require("yyyy-mm-dd");
 
 const mongoose = require("mongoose");
 
@@ -41,6 +42,14 @@ AuthorSchema.virtual("date_of_birth_formatted").get(function () {
 
 AuthorSchema.virtual("date_of_death_formatted").get(function () {
   return formatJSDate(this.date_of_death);
+});
+
+AuthorSchema.virtual("date_of_birth_formatted_for_date_input").get(function() {
+  return (this.date_of_birth) ? yyyymmdd(this.date_of_birth) : "";
+});
+
+AuthorSchema.virtual("date_of_death_formatted_for_date_input").get(function() {
+  return (this.date_of_death) ? yyyymmdd(this.date_of_death) : "";
 });
 
 AuthorSchema.virtual("lifespan").get(function () {
