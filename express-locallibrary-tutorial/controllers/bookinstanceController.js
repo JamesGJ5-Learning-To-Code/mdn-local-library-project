@@ -257,7 +257,9 @@ exports.bookinstance_update_post = [
           title: "Update BookInstance",
           bookinstance,
           book_list: foundBookArray,
-          selected_book: bookinstance.book._id
+          selected_book: bookinstance.book._id,
+          // TODO: make sure the below show up in the view
+          errors: errors.array(),
         });
       })
       .catch((err) => {

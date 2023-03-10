@@ -250,6 +250,8 @@ exports.author_update_post = [
       res.render("author_form", {
         title: "Update Author",
         author,
+        // TODO: make sure the below show up in the view
+        errors: errors.array(),
       });
       return;
     }
