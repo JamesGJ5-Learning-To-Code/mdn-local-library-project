@@ -193,5 +193,28 @@ exports.bookinstance_update_get = (req, res, next) => {
 
 // Handle bookinstance update on POST.
 exports.bookinstance_update_post = (req, res, next) => {
-  res.send("NOT IMPLEMENTED: BookInstance update POST");
+  // First we must validate and sanitise the fields of the request's body, which have names: 
+  // - 'book', the title of the book
+  // - 'imprint', the imprint of the book
+  // - 'due_back', the due date of the book
+  // - 'status', the status of the book
+  // Just do the same validation as in the controller 'bookinstance_create_post', using the 
+  // 'body' function
+
+  // All of the below happens in the next middleware function:
+
+  // We use validationResult() to get an array of errors
+
+  // We make a new BookInstance object out of the fields sanitised earlier in this controller
+
+  // If the errors array is not empty, we render bookinstance_form.pug, passing to it the 
+  // correct title, the new BookInstance object as 'bookinstance', foundBookArray (found 
+  // by database search if there are errors) as 'book_list', the BookInstance object's 
+  // book._id as 'selected_book', and the errors array returned by validationResult() as 
+  // 'errors'
+
+  // Otherwise, we findByIdAndUpdate the BookInstance, passing req.params.id as the ID, 
+  // specifying the new BookInstance as the replacer, specifying {} as options (I.E. no 
+  // options), then redirecting to resulting BookInstance's URL (coming from promise 
+  // fulfillment)
 };
