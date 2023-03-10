@@ -164,7 +164,17 @@ exports.author_delete_post = (req, res, next) => {
 
 // Display Author update form on GET.
 exports.author_update_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: Author update GET");
+  // Taking id from req.params.id, find the Author object in the database via its ID, 
+  // using orFail() to ensure the query is rejected if the Author is not found
+
+  // If the above query is rejected, pass the error to the next piece of middleware.
+
+  // If query is instead fulfilled, do the following:
+
+  // Render an author_form with the following parameters:
+  // - author: the author object that was found
+
+  // Put a link in author_detail.pug that triggers a GET request with the correct URL
 };
 
 // Handle Author update on POST.
