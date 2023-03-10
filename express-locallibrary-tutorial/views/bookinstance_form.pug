@@ -18,6 +18,7 @@ block content
       label(for='due_back') Date when book available:
       input#due_back.form-control(type='date' name='due_back' value=(undefined===bookinstance ? '' : bookinstance.due_back))
 
+    //- TODO: might need to have the bookinstance's status as the default selected below
     div.form-group
       label(for='status') Status:
       select#status.form-control(type='select' placeholder='Select status' name='status' required='true')
