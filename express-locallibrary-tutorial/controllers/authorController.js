@@ -176,14 +176,17 @@ exports.author_update_get = (req, res, next) => {
 
   // Put a link in author_detail.pug that triggers a GET request with the correct URL
 
-  // Author.findById(req.params.id)
-  //   .orFail()
-  // .then((foundAuthor) => {
-
-  // })
-  // .catch((err) => {
-  //   return next(err)
-  // })
+  Author.findById(req.params.id)
+    .orFail()
+  .then((foundAuthor) => {
+    res.render("author_form", {
+      title: "Update Author",
+      author: foundAuthor,
+    });
+  })
+  .catch((err) => {
+    return next(err)
+  })
 };
 
 // Handle Author update on POST.
