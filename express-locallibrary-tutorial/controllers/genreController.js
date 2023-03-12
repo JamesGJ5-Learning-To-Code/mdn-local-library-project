@@ -132,7 +132,7 @@ exports.genre_delete_post = (req, res, next) => {
   .then((results) => {
     const [foundGenre, foundBookArray] = results;
     if (foundBookArray.length > 0) {
-      res.render("/catalog/genres", {
+      res.render("genre_delete", {
         title: "Delete Genre",
         genre: foundGenre,
         genre_books: foundBookArray
