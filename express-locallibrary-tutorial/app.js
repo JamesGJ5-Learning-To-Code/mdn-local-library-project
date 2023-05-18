@@ -13,6 +13,7 @@ var app = express();
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set('strictQuery', false);
+// NOTE: the cluster below no longer exists so the connection string is not sensitive information
 const dev_db_url = "mongodb+srv://jamesgracajones:9b3h9YAwSf3X44OO@cluster0.nepyass.mongodb.net/?retryWrites=true&w=majority";
 const mongoDB = process.env.MONGODB_URI || dev_db_url;
 
